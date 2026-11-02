@@ -1,27 +1,21 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import libsql              # ← paquete NUEVO (no libsql_client)
-import os
+import libsql
 
 app = FastAPI(title="API Catastro RUC SRI")
 
-# En Render estas variables deben estar configuradas en "Environment".
-# Si no existen, la API falla al arrancar (mejor que fallar silenciosamente
-# con un token truncado).
-TURSO_URL   = os.environ["TURSO_URL"]
-TURSO_TOKEN = os.environ["TURSO_TOKEN"]
-
+# URL y TOKEN DIRECTOS (Para pruebas)
+TURSO_URL = "libsql://rucec-denisfer2000.aws-sa-east-1.turso.io"
+TURSO_TOKEN = "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3OTI5OTY1NzgsImlkIjoiMDFhMTc2NjgtOTcwMS03ZmE2LTllNmEtNTk0ZDUzZmU1MDY2Iiwia2lkIjoiM3kxS1lKREdwM0V2ZkZLQkxpdjc1WE9fSndzVGt6TGY2OWhFenNiTnl5ayIsInJpZCI6ImYxMTU2MTM0LTg1MTUtNGUwOS1hMmRjLWYzNDI0OGM2Y2U0YiJ9.dbtRIbQ7mnANp4BDO_iEC8QkJTpgKfzVbNUPMqT9Nd3Ka1dISqaeMZEABlAREKUMyFfDdCUjUDCsJXR_nAAWDw"
 
 class Contribuyente(BaseModel):
     ruc: str
     razon_social: str
     estado: str
 
-
 @app.get("/")
 def inicio():
     return {"mensaje": "API de RUC funcionando correctamente"}
-
 
 @app.get("/api/ruc/{ruc}", response_model=Contribuyente)
 def consultar_ruc(ruc: str):

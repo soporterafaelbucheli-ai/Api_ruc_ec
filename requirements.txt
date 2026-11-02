@@ -1,4 +1,4 @@
 fastapi
-uvicorn
-libsql-client
+uvicorn[standard]
+libsql
 pydantic
